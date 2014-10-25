@@ -86,7 +86,6 @@ bigStepsFire = 2
     left -36px
     transform translateY(72px)
     opacity 0
-    animation-delay 9.5s
   .inner
     position absolute
     width 100%
@@ -152,6 +151,17 @@ bigStepsFire = 2
     background-position -198px 0px
   100%
     background-position -1980px 0px
+
+// fireSteps = (0 11 11 9 12 11 28 30 31 30 116 16 14 16 15 31 16 60 16 16 15 15 14 1)
+// totalFireSteps = 534
+// fireStepsCount = 0
+// @keyframes bigFireInner
+//   for steps in 0..23
+//     fireStepsCount += fireSteps[steps]
+//     perc = (fireStepsCount / totalFireSteps)
+//     {100% * perc}
+//       background-position -1980px + (-6732px + 1980px) * perc 0
+
 
 @keyframes bigFireInner
   0%

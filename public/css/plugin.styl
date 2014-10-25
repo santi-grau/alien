@@ -1,0 +1,45 @@
+@import 'nib'
+
+// SMALL ALIEN
+smallStepsFire = 4
+
+.smallAlien
+  width 50px
+  height 32px
+  position absolute
+  animation smallWalkFire smallStepsFire * 0.8s steps(smallStepsFire) forwards, smallFire 0s steps(1) forwards
+  animation-delay 0s, smallStepsFire * 0.8s
+  top 100px
+  margin-left -29px
+  .inner
+    position absolute
+    width 100%
+    height 100%
+    background-image url("data:image/gif;base64,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")
+    background-size auto 100%
+    animation smallWalkInner .8s steps(12) smallStepsFire forwards, smallFireInner 1s steps(6) 1 forwards
+    animation-delay 0s, smallStepsFire * 0.8s
+
+@keyframes smallWalkFire
+  0%
+    left 0px
+  100%
+    left 24px * smallStepsFire
+
+@keyframes smallFire
+  0%
+    width 50px
+  100%
+    width 32px
+
+@keyframes smallWalkInner
+  0%
+    background-position 0px 0px
+  100%
+    background-position -600px 0
+
+@keyframes smallFireInner
+  0%
+    background-position -600px 0px
+  100%
+    background-position -792px 0
