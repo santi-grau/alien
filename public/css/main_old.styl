@@ -1,0 +1,71 @@
+@import 'nib'
+
+#absolute
+  position absolute
+  left 50px
+  top 400px
+  background #F00
+  width 100px
+  height 100px
+
+#relative
+  position relative
+  left 150px
+  top 100px
+  background #0F0
+  width 100px
+  height 100px
+
+#fixed
+  position fixed
+  left 200px
+  top 400px
+  background #00F
+  width 100px
+  height 100px
+
+img
+  position fixed
+  left 50px
+  top 50px
+
+p
+  width 200px
+  margin-left 100px
+
+steps = 10
+body
+  margin 0
+  padding 0
+  #container
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+  .step
+    position absolute
+    opacity 0
+    border-left solid (100/steps)vw
+    border-right solid (100/steps)vw
+    border-top solid (100/steps)vh
+    border-bottom solid (100/steps)vh
+  for count in (0..(steps))
+    .step:nth-child({count+1})
+      border-color hsl( floor( count / steps * 185 ) , 100% , 50% )
+      width round((100 - (count/steps) * 100vw) - (100/steps*2)vw)
+      height round((100 - (count/steps) * 100vh) - (100/steps*2)vh)
+      left (count/steps)*50vw
+      top (count/steps)*50vh
+      &.show
+        animation inAndOut 100s count*0.03s
+
+@keyframes inAndOut
+  0% 
+    opacity 0
+  1%
+    opacity 1
+  99%
+    opacity 1
+  100%
+    opacity 0
