@@ -8,8 +8,10 @@ html
     meta(name='description', content='Quark alien')
     //- link(rel="stylesheet",href="css/plugin.css")
   body
-    div(style="position: absolute; width: 300px; height: 300px; top: 50px; left: 200px; background: #000", onclick="$(this).alien()")
-    //- div.smallAlien
-    //-   div.inner
+    - var left = Math.random()*400
+    - var top = Math.random()*400
+    - var width = Math.random()*800
+    - var height = Math.random()*800
+    div(style="position: absolute; width: #{width}px; height: #{height}px; top: #{top}px; left: #{left}px; background: #DEDEDE", onclick="$(this).alien()")
     script(src="js/libs/jquery/dist/jquery.min.js")
     script(src="js/main.js")

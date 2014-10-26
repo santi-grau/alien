@@ -11,9 +11,10 @@
 		if(this.hasClass('alienated')) return;
 		var date = new Date();
 		var time = date.getTime();
-		var block = $('<div class="block" />').appendTo('body');
-		var alienSmall = $('<div class="alien" >').appendTo('body');
-		var innerSmall = $('<div class="inner" />').appendTo(alienSmall);
+		
+		var alienSmall = $('<div id="alien-' + time + '" >').appendTo('body');
+		var innerSmall = $('<div id="inner"-' + time + ' />').appendTo(alienSmall);
+		
 
 		var alienSmallStepDistance = 24;
 		var position = this.css('position');
@@ -22,60 +23,105 @@
 		var blockWidth = this.width();
 		var blockHeight = this.height();
 		var alienSmallSteps = Math.floor((offset.left - 32) / alienSmallStepDistance);
-		var gradientSteps = 20;
+		
 
+		var stylesheet = $("<style>").attr({ id: time, type: "text/css" }).appendTo("head");
+		function whichAnimationEvent(el){
+			var t;
+			var animations = {
+				'animation':'animationend',
+				'OAnimation':'oAnimationEnd',
+				'MozAnimation':'animationend',
+				'WebkitAnimation':'webkitAnimationEnd'
+			}
+
+			for(t in animations){
+				if( el.style[t] !== undefined ){
+					return animations[t];
+				}
+			}
+		}
 		var smallAlien = function(){
+			var gradientStepWidth = 6;
+			var gradientSteps = Math.floor(Math.min(blockWidth/gradientStepWidth/2, blockHeight/gradientStepWidth/2));
+			prefixes.forEach(function(prefix){
+				var hue = 360;
+				var gradientStep = gradientStepWidth;
+				var gradientString = ' box-shadow: inset 0 0 0 ' + gradientStep + 'px hsl(360, 100%, 50%)'
+				var gradientCss = '@' + prefix + 'keyframes gradient-' + time + ' {';
+				for(i=0; i < gradientSteps + 1; i++){
+					gradientCss += ' ' + 100 * (i / gradientSteps) + '% {';
+						gradientCss += gradientString + '; ';
+					gradientCss += '}';
+					hue += 8;
+					gradientStep += 6;
+					gradientString += ', inset 0 0 0 ' + gradientStep + 'px hsl(' + hue + ', 100%, 50%)'
+				}
+				gradientCss += '}';
+				stylesheet.append(gradientCss);
+			});
+			var block = $('<div id="block-' + time + '" />').appendTo('body');
 			block.css({
 				'position' : position,
 				'left' : offset.left,
 				'top' : offset.top,
 				'width' : blockWidth,
-				'height' : blockHeight,
-				'-webkit-animation' : 'gradient .3s steps(' + gradientSteps + ') forwards'
+				'height' : blockHeight
 			});
+			prefixes.forEach(function(prefix){
+				block.css( prefix + 'animation' , 'gradient-' + time + ' ' + 0.05 * gradientSteps + 's steps(' + gradientSteps + ') forwards ' + (1.2 + alienSmallSteps * 0.8) + 's');
+			})
 			alienSmall.css({
 				'width' : 50,
 				'height' : 32,
-				'top' : offset.top,
+				'top' : offset.top + blockHeight / 2 - 16,
 				'margin-left' : -25,
-				'position' : 'absolute',
-				'animation' : 'smallWalkFire ' + alienSmallSteps * 0.8 + 's steps(' + alienSmallSteps + ') forwards 0s, smallFire 0s steps(1) forwards ' + alienSmallSteps * 0.8 + 's',
-				'-webkit-animation' : 'smallWalkFire ' + alienSmallSteps * 0.8 + 's steps(' + alienSmallSteps + ') forwards 0s, smallFire 0s steps(1) forwards ' + alienSmallSteps * 0.8 + 's'
+				'position' : 'absolute'
 			});
+			prefixes.forEach(function(prefix){
+				alienSmall.css( prefix + 'animation' , 'smallWalkFire-' + time + ' ' + alienSmallSteps * 0.8 + 's steps(' + alienSmallSteps + ') forwards 0s, smallFire-' + time + ' 0s steps(1) forwards ' + alienSmallSteps * 0.8 + 's');
+			})
 			innerSmall.css({
 				'position' : 'absolute',
 				'width' : '100%',
 				'height' : '100%',
-				'background' : 'url('+spriteSmall+')',
-				'animation' : 'smallWalkInner .8s steps(12) ' + alienSmallSteps + ' forwards 0s, smallFireInner 1s steps(6) 1 forwards ' + alienSmallSteps * 0.8 + 's',
-				'-webkit-animation' : 'smallWalkInner .8s steps(12) ' + alienSmallSteps + ' forwards 0s, smallFireInner 1s steps(6) 1 forwards ' + alienSmallSteps * 0.8 + 's'
+				'background' : 'url('+spriteSmall+')'
 			});
+			prefixes.forEach(function(prefix){
+				innerSmall.css( prefix + 'animation' , 'smallWalkInner-' + time + ' .8s steps(12) ' + alienSmallSteps + ' forwards 0s, smallFireInner-' + time + ' 1s steps(6) 1 forwards ' + alienSmallSteps * 0.8 + 's');
+			})
+			prefixes.forEach(function(prefix){
+				stylesheet.append(
+					'@' + prefix + 'keyframes smallWalkFire-' + time + ' { 0% { left: 0px; } 100% { left: ' + 24 * alienSmallSteps + 'px; } }\n' +
+					'@' + prefix + 'keyframes smallFire-' + time + ' { 0% { width: 50px; } 100% { width: 32px; } }\n' +
+					'@' + prefix + 'keyframes smallWalkInner-' + time + ' { 0% { background-position: 0px 0px; } 100% { background-position: -600px 0; } }\n' +
+					'@' + prefix + 'keyframes smallFireInner-' + time + ' { 0% { background-position: -600px 0px; } 100% { background-position: -792px 0; } }'
+				);
+			});
+			var blockEl = document.getElementById("block-" + time);
+			var eventTypes = {
+				'animation':'animationend',
+				'OAnimation':'oAnimationEnd',
+				'MozAnimation':'animationend',
+				'WebkitAnimation':'webkitAnimationEnd'
+			}
+			for(t in eventTypes){
+				if( blockEl.style[t] !== undefined ){
+					blockEl.addEventListener(eventTypes[t], function(){
+						setTimeout(function(){
+							block.remove();
+							alienSmall.remove();
+							self.remove();
+							stylesheet.remove();
+						}, 1000)
+						
+					
+					}, false);
+				}
+			}
 		}
-		
 		if(!options || options == 'small') smallAlien();
 
 		this.addClass('alienated');
-
-		var stylesheet = $("<style>").attr({ id: time, type: "text/css" }).appendTo("head");
-		stylesheet.append('@-webkit-keyframes smallWalkFire { 0% { left: 0px; } 100% { left: ' + 24 * alienSmallSteps + 'px; } }');
-		stylesheet.append('@-webkit-keyframes smallFire { 0% { width: 50px; } 100% { width: 32px; } }');
-		stylesheet.append('@-webkit-keyframes smallWalkInner { 0% { background-position: 0px 0px; } 100% { background-position: -600px 0; } }');
-		stylesheet.append('@-webkit-keyframes smallFireInner { 0% { background-position: -600px 0px; } 100% { background-position: -792px 0; } }');
-
-		
-		var hue = 360;
-		var gradientWidth = 6;
-		var gradientString = ' box-shadow: inset 0 0 0 ' + gradientWidth + 'px hsl(360, 100%, 50%)'
-		var gradientCss = '@-webkit-keyframes gradient {';
-		for(i=0; i < gradientSteps + 1; i++){
-			gradientCss += ' ' + 100 * (i / gradientSteps) + '% {';
-				gradientCss += gradientString + '; ';
-			gradientCss += '}';
-			hue += 4;
-			gradientWidth += 6;
-			gradientString += ', inset 0 0 0 ' + gradientWidth + 'px hsl(' + hue + ', 100%, 50%)'
-		}
-		gradientCss += '}';
-		stylesheet.append(gradientCss)
 	};
 }(jQuery));
