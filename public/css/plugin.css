@@ -30,8 +30,8 @@
 }
 @-moz-keyframes gradient {
   0% {
-    -webkit-box-shadow: inset 0 0 0 5px #ccc;
-    box-shadow: inset 0 0 0 5px #ccc;
+    -webkit-box-shadow: inset 0 0 0 3px #ccc;
+    box-shadow: inset 0 0 0 3px #ccc;
   }
   25% {
     -webkit-box-shadow: inset 0 0 0 5px #ccc, inset 0 0 0 10px #e6e6e6;
@@ -48,8 +48,8 @@
 }
 @-webkit-keyframes gradient {
   0% {
-    -webkit-box-shadow: inset 0 0 0 5px #ccc;
-    box-shadow: inset 0 0 0 5px #ccc;
+    -webkit-box-shadow: inset 0 0 0 3px #ccc;
+    box-shadow: inset 0 0 0 3px #ccc;
   }
   25% {
     -webkit-box-shadow: inset 0 0 0 5px #ccc, inset 0 0 0 10px #e6e6e6;
@@ -66,8 +66,8 @@
 }
 @-o-keyframes gradient {
   0% {
-    -webkit-box-shadow: inset 0 0 0 5px #ccc;
-    box-shadow: inset 0 0 0 5px #ccc;
+    -webkit-box-shadow: inset 0 0 0 3px #ccc;
+    box-shadow: inset 0 0 0 3px #ccc;
   }
   25% {
     -webkit-box-shadow: inset 0 0 0 5px #ccc, inset 0 0 0 10px #e6e6e6;
@@ -84,8 +84,8 @@
 }
 @keyframes gradient {
   0% {
-    -webkit-box-shadow: inset 0 0 0 5px #ccc;
-    box-shadow: inset 0 0 0 5px #ccc;
+    -webkit-box-shadow: inset 0 0 0 3px #ccc;
+    box-shadow: inset 0 0 0 3px #ccc;
   }
   25% {
     -webkit-box-shadow: inset 0 0 0 5px #ccc, inset 0 0 0 10px #e6e6e6;
@@ -200,31 +200,19 @@
   0% {
     background-position: -600px 0px;
   }
-  100% {
-    background-position: -792px 0;
-  }
 }
 @-webkit-keyframes smallFireInner {
   0% {
     background-position: -600px 0px;
-  }
-  100% {
-    background-position: -792px 0;
   }
 }
 @-o-keyframes smallFireInner {
   0% {
     background-position: -600px 0px;
   }
-  100% {
-    background-position: -792px 0;
-  }
 }
 @keyframes smallFireInner {
   0% {
     background-position: -600px 0px;
-  }
-  100% {
-    background-position: -792px 0;
   }
 }
