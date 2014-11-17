@@ -135,7 +135,6 @@
 			}, this), 1000);
 		}
 
-
 		var BigAlien = function(){
 			this.alienSmallStepDistance = 24;
 			this.alienSmallSteps = Math.floor((offset.left + blockWidth/2 + 16) / this.alienSmallStepDistance);
@@ -150,7 +149,7 @@
 			.appendTo(this.alienSmall);
 
 			this.alienBigContainer = $('<div id="alienBigContainer-' + time + '" />')
-			.css({ 'width' : $(window).width() - (offset.left + blockWidth/2), 'height' : 148, 'background' : '#F00', 'right' : 0, 'top' : offset.top + blockHeight / 2 - 110, 'position' : 'absolute', 'overflow' : 'hidden' })
+			.css({ 'width' : $(window).width() - (offset.left + blockWidth/2), 'height' : 148, 'right' : 0, 'top' : offset.top + blockHeight / 2 - 110, 'position' : 'absolute', 'overflow' : 'hidden' })
 			.appendTo('body');
 
 			this.alienBig = $('<div id="alienBig-' + time + '" >')
@@ -172,8 +171,11 @@
 			this.alienSmall.bind('animationstart oAnimationStart webkitAnimationStart animationiteration oAnimationIteration webkitAnimationIteration', this.playStepSound.bind(this));
 
 			// bind end inner alien to placeBigAlien()
-			//this.alienSmall.bind('animationend oAnimationEnd webkitAnimationEnd', this.initBigAlien.bind(this));
+			// this.alienSmall.bind('animationend oAnimationEnd webkitAnimationEnd', this.initBigAlien.bind(this));
 			this.initBigAlien()
+
+			// bind end ballAnimation to end()
+			this.ball.bind('animationend oAnimationEnd webkitAnimationEnd', this.end.bind(this));
 		}
 		// starts big alien when small is done
 		BigAlien.prototype.initBigAlien = function(){
@@ -182,8 +184,8 @@
 				this.alienBig.css( prefix + 'animation' , 'bigWalk-' + time + ' ' + this.alienBigSteps * 0.8 + 's steps(' + this.alienBigSteps + ') forwards 0s, bigFire-' + time + ' 0s steps(1) forwards ' + this.alienBigSteps * 0.8 + 's');
 				this.innerBig.css( prefix + 'animation' , 'bigWalkInner-' + time + ' .8s steps(9) ' + this.alienBigSteps + ' forwards 0s, bigFireInner-' + time + ' 8s steps(22) 1 forwards ' + this.alienBigSteps * 0.8 + 's');
 				this.ball.css(prefix + 'transform', 'translateY(40px)');
-				this.ball.css( prefix + 'animation' , 'ball-' + time + ' 4s steps(49) infinite ' + (8 + this.alienBigSteps * 0.8 )+ 's, ballMove-' + time + ' 4s 1 forwards ' + (8 + this.alienBigSteps * 0.8) + 's, ballBounce-' + time + ' 4s infinite forwards ' + (8 + this.alienBigSteps * 0.8) + 's');
-			},this))
+				this.ball.css( prefix + 'animation' , 'ball-' + time + ' 4s steps(49) infinite ' + (8 + this.alienBigSteps * 0.8) + 's, ballBounce-' + time + ' 4s ' + (8 + this.alienBigSteps * 0.8) + 's, ballMove-' + time + ' 4s ' + (8 + this.alienBigSteps * 0.8) + 's');
+			},this));
 			this.alienPlaced = true;
 		}
 		// plays the step sound
@@ -208,18 +210,30 @@
 				'@' + prefix + 'keyframes bigWalkInner-' + time + ' { 0% { background-position: -99px 0px; } 100% { background-position: -990px 0; } }\n' +
 				'@' + prefix + 'keyframes bigFireInner-' + time + ' { 0% { background-position: -990px 0px; } 100% { background-position: -3366px 0; } }\n' +
 				'@' + prefix + 'keyframes ball-' + time + ' { 0% { background-position: 0px 0px; opacity: 1; } 100% { background-position: -833px 0; opacity: 1; } }\n' +
-				// '@' + prefix + 'keyframes ballMove-' + time + ' { 0% { ' + prefix + 'animation-timing-function: linear; left: 36px; } 100% { ' + prefix + 'animation-timing-function: linear; left: -200px; } }\n' +
-				'@' + prefix + 'keyframes ballBounce-' + time + ' { ' +
-					'0% { transform: translateY(45px); ' + prefix + 'animation-timing-function: ease-in; } '+
-					'40% { transform: translateY(50px); ' + prefix + 'animation-timing-function: ease-in; } '+
-					'65% { transform: translateY(70px); ' + prefix + 'animation-timing-function: ease-in; } '+
-					'82% { transform: translateY(100px); ' + prefix + 'animation-timing-function: ease-in; } '+
-					'92% { transform: translateY(100px); ' + prefix + 'animation-timing-function: ease-in; } '+
-					'25%, 55%, 75%, 87%, 97%, 100% { transform: translateY(110px); ' + prefix + 'animation-timing-function: ease-out; } }'
+				'@' + prefix + 'keyframes ballMove-' + time + ' { 0% { ' + prefix + 'animation-timing-function: linear; left: -23px; } 100% { ' + prefix + 'animation-timing-function: linear; left: -170px; } }\n' +
+				'@' + prefix + 'keyframes ballBounce-' + time + ' { \n' +
+					'0% { ' + prefix + 'transform: translateY(45px); ' + prefix + 'animation-timing-function: ease-in; } \n'+
+					'22% { ' + prefix + 'transform: translateY(110px); ' + prefix + 'animation-timing-function: ease-out; } \n'+
+					'37% { ' + prefix + 'transform: translateY(50px); ' + prefix + 'animation-timing-function: ease-in; } \n'+
+					'55% { ' + prefix + 'transform: translateY(110px); ' + prefix + 'animation-timing-function: ease-out; } \n'+
+					'64% { ' + prefix + 'transform: translateY(70px); ' + prefix + 'animation-timing-function: ease-in; } \n'+
+					'73% { ' + prefix + 'transform: translateY(110px); ' + prefix + 'animation-timing-function: ease-out; } \n'+
+					'79% { ' + prefix + 'transform: translateY(90px); ' + prefix + 'animation-timing-function: ease-in; } \n'+
+					'86% { ' + prefix + 'transform: translateY(110px); ' + prefix + 'animation-timing-function: ease-out; } \n'+
+					'90% { ' + prefix + 'transform: translateY(100px); ' + prefix + 'animation-timing-function: ease-in; } \n'+
+					'94% { ' + prefix + 'transform: translateY(110px); ' + prefix + 'animation-timing-function: ease-out; } \n'+
+					'96% { ' + prefix + 'transform: translateY(107px); ' + prefix + 'animation-timing-function: ease-in; } \n'+
+					'97% { ' + prefix + 'transform: translateY(110px); ' + prefix + 'animation-timing-function: ease-out; } \n'+
+					'99% { ' + prefix + 'transform: translateY(109px); ' + prefix + 'animation-timing-function: ease-in; } \n'+
+					'100%{ ' + prefix + 'transform: translateY(110px); ' + prefix + 'animation-timing-function: ease-out; } }'
 			);
 		}
-
-
+		// Ends Big alien animation and plays exploding sound
+		BigAlien.prototype.end = function(e){
+			if(this.ballExploded) return;
+			console.log('end');
+			this.ballExploded = true;
+		}
 		if(!options || options == 'small') new SmallAlien();
 		else if(options == 'big') new BigAlien();
 		else console.warn('Wrong options for Alien Plugin! Must be "big" or "small"');
